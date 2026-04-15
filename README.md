@@ -11,11 +11,36 @@ This tool:
 
 ---
 
-# Quick Start (3 Steps)
+# Quick Start (4 Steps)
 
 ---
 
-## 1. Install Python and rclone
+## 1. Download this tool
+
+You need to download this tool to your computer first.
+
+### Option A: Download as a zip file (easiest)
+
+1. Go to [https://github.com/aus-plant-phenomics-network/pawsey_uploads_utility](https://github.com/aus-plant-phenomics-network/pawsey_uploads_utility)
+2. Click the green **"Code"** button
+3. Click **"Download ZIP"**
+4. Open the downloaded zip file and extract (unzip) it to a folder you'll remember, for example:
+   - **Windows:** `C:\Users\YourName\Desktop\pawsey_uploads_utility`
+   - **Mac:** `/Users/YourName/Desktop/pawsey_uploads_utility`
+
+### Option B: Using git (if you have git installed)
+
+Open **Command Prompt** (Windows) or **Terminal** (Mac) and type:
+
+```
+git clone https://github.com/aus-plant-phenomics-network/pawsey_uploads_utility.git
+```
+
+This creates a folder called `pawsey_uploads_utility` in your current location.
+
+---
+
+## 2. Install Python and rclone
 
 You need two programs installed on your computer: **Python** and **rclone**. Follow the steps for your operating system below.
 
@@ -110,11 +135,11 @@ rclone version
 
 ---
 
-##  2. Configure your Pawsey access
+## 3. Configure your Pawsey access
 
-Run:
+Open **Command Prompt** (Windows) or **Terminal** (Mac) and run:
 
-```bash
+```
 rclone config
 ```
 
@@ -138,17 +163,39 @@ region: (leave blank)
 You can find access_key_id and secret_access_key in Pawsey portal. Login -> Acacia -> Create New Key -> Copy Access ID and Secret Key
 ---
 
-## 3. Upload data
+## 4. Upload data
 
-```bash
+First, you need to **navigate to the tool's folder** in your Command Prompt or Terminal. This is the folder you downloaded in Step 1.
+
+**Windows** — open **Command Prompt** and type:
+
+```
+cd C:\Users\YourName\Desktop\pawsey_uploads_utility
+```
+
+**Mac** — open **Terminal** and type:
+
+```
+cd /Users/YourName/Desktop/pawsey_uploads_utility
+```
+
+> Replace the path above with wherever you saved the folder in Step 1.
+
+Now run the upload command:
+
+```
 python pawsey_uploader.py upload /path/to/data your-bucket-name
 ```
 
+> **Mac users:** use `python3` instead of `python`
+
 ### Example:
 
-```bash
+```
 python pawsey_uploader.py upload ./drone-data adelaideu-data
 ```
+
+> **Tip:** You need to be inside the `pawsey_uploads_utility` folder every time you run a command. If you close and reopen Command Prompt / Terminal, you'll need to `cd` into the folder again.
 
 ---
 
