@@ -137,30 +137,45 @@ rclone version
 
 ## 3. Configure your Pawsey access
 
-Open **Command Prompt** (Windows) or **Terminal** (Mac) and run:
+Open **Command Prompt** (Windows) or **Terminal** (Mac) and type:
 
 ```
 rclone config
 ```
 
-Follow prompts:
+It will ask you a series of questions. Follow along below — type the answer shown after each prompt and press **Enter**:
+
+| It asks | You type |
+|---------|----------|
+| `e/n/d/r/c/s/q>` | `n` (for new remote) |
+| `name>` | `pawsey-user` |
+| `Storage>` | `s3` |
+| `provider>` | `Ceph` |
+| `env_auth>` | `false` |
+| `access_key_id>` | Your access key (see below where to find it) |
+| `secret_access_key>` | Your secret key (see below where to find it) |
+| `region>` | Just press **Enter** (leave blank) |
+| `endpoint>` | `https://projects.pawsey.org.au` |
+| `location_constraint>` | Just press **Enter** (leave blank) |
+| `acl>` | Just press **Enter** (leave blank) |
+
+For any other questions it asks, just press **Enter** to accept the default until you see:
 
 ```
-n) New remote
-name: pawsey-user
-type: s3
+y) Yes this is OK
 ```
 
-Enter:
+Type `y` and press **Enter**. Then type `q` to quit the config.
 
-```
-endpoint: https://projects.pawsey.org.au
-access_key_id: <your key>
-secret_access_key: <your secret>
-region: (leave blank)
-```
+### Where to find your access key and secret key:
 
-You can find access_key_id and secret_access_key in Pawsey portal. Login -> Acacia -> Create New Key -> Copy Access ID and Secret Key
+1. Go to the **Pawsey portal** and log in
+2. Navigate to **Acacia**
+3. Click **"Create New Key"**
+4. Copy the **Access ID** — this is your `access_key_id`
+5. Copy the **Secret Key** — this is your `secret_access_key`
+
+> **Important:** Save these keys somewhere safe. The secret key is only shown once!
 ---
 
 ## 4. Upload data
