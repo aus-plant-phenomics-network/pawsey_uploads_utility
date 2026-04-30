@@ -4,36 +4,46 @@ import sys
 import os
 
 RCLONE_REMOTE = "pawsey-user"
-ACL_HEADER = "X-Amz-Acl:bucket-owner-full-control"
-
 
 def run_command(cmd):
     try:
         print("\nRunning:", " ".join(cmd))
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError:
-        print("\n❌ Error: Command failed.")
+        print("\n Error: Command failed.")
         sys.exit(1)
 
 
 def upload(source, bucket):
     if not os.path.exists(source):
-        print("❌ Source path does not exist")
+        print(" Source path does not exist")
         sys.exit(1)
 
+    # If source is a folder, preserve the folder name in the destination
+    dest = f"{RCLONE_REMOTE}:{bucket}"
+    if os.path.isdir(source):
+        folder_name = os.path.basename(os.path.normpath(source))
+        dest = f"{RCLONE_REMOTE}:{bucket}/{folder_name}"
+
     cmd = [
-        "rclone", "copy", source, f"{RCLONE_REMOTE}:{bucket}",
-        "--header", ACL_HEADER,
+        "rclone", "copy", source, dest,
+        "--s3-acl", "bucket-owner-full-control",
         "--s3-no-check-bucket",
+        "--s3-disable-checksum",
+        "--s3-chunk-size", "64M",
+        "--s3-upload-concurrency", "4",
+        "--multi-thread-streams", "0",
         "--progress",
-        "--transfers", "8",
+        "--stats", "10s",
+        "--transfers", "1",
         "--checkers", "16",
         "--retries", "5",
-        "--low-level-retries", "10"
+        "--low-level-retries", "10",
+        "-v"
     ]
 
     run_command(cmd)
-    print("\n✅ Upload completed successfully!")
+    print("\n Upload completed successfully!")
 
 
 def list_bucket(bucket):
