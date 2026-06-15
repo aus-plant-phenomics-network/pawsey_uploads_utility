@@ -3,7 +3,7 @@ import subprocess
 import sys
 import os
 
-RCLONE_REMOTE = "pawsey-user"
+RCLONE_REMOTE = "aaneja"
 
 def run_command(cmd):
     try:
@@ -27,7 +27,6 @@ def upload(source, bucket):
 
     cmd = [
         "rclone", "copy", source, dest,
-        "--s3-acl", "bucket-owner-full-control",
         "--s3-no-check-bucket",
         "--s3-disable-checksum",
         "--s3-chunk-size", "64M",
@@ -44,6 +43,36 @@ def upload(source, bucket):
 
     run_command(cmd)
     print("\n Upload completed successfully!")
+
+
+def download(remote_path, dest, bucket):
+    source = f"{RCLONE_REMOTE}:{bucket}/{remote_path}"
+    cmd = [
+        "rclone", "copy", source, dest,
+        "--progress",
+        "--transfers", "4",
+        "--checkers", "16",
+        "--retries", "5",
+        "--low-level-retries", "10",
+        "-v"
+    ]
+    run_command(cmd)
+    print("\n Download completed successfully!")
+
+
+def delete(remote_path, bucket):
+    target = f"{RCLONE_REMOTE}:{bucket}/{remote_path}"
+    print(f"\n⚠️  You are about to delete: {target}")
+    confirm = input("Are you sure? (yes/no): ").strip().lower()
+    if confirm != "yes":
+        print(" Cancelled.")
+        return
+    cmd = [
+        "rclone", "delete", target,
+        "-v"
+    ]
+    run_command(cmd)
+    print("\n Delete completed successfully!")
 
 
 def list_bucket(bucket):
@@ -65,6 +94,17 @@ def main():
     upload_parser.add_argument("source", help="Local file or folder path")
     upload_parser.add_argument("bucket", help="Target bucket")
 
+    # Download command
+    download_parser = subparsers.add_parser("download", help="Download files/folders from bucket")
+    download_parser.add_argument("remote_path", help="Remote path within the bucket (e.g. folder/subfolder/file.txt)")
+    download_parser.add_argument("dest", help="Local destination folder")
+    download_parser.add_argument("bucket", help="Bucket name")
+
+    # Delete command
+    delete_parser = subparsers.add_parser("delete", help="Delete files/folders from bucket")
+    delete_parser.add_argument("remote_path", help="Remote path to delete (e.g. folder/subfolder/file.txt)")
+    delete_parser.add_argument("bucket", help="Bucket name")
+
     # List command
     list_parser = subparsers.add_parser("list", help="List bucket contents")
     list_parser.add_argument("bucket", help="Bucket name")
@@ -73,6 +113,10 @@ def main():
 
     if args.command == "upload":
         upload(args.source, args.bucket)
+    elif args.command == "download":
+        download(args.remote_path, args.dest, args.bucket)
+    elif args.command == "delete":
+        delete(args.remote_path, args.bucket)
     elif args.command == "list":
         list_bucket(args.bucket)
     else:
