@@ -1,11 +1,13 @@
 
 # Pawsey Upload Tool (APPN)
 
-A simple tool to upload data to Pawsey (Acacia S3).
+A simple tool to upload, download, and manage data on Pawsey (Acacia S3).
 
 This tool:
 
 *  Uploads files and folders
+*  Downloads files and folders from a bucket
+*  Deletes files and folders from a bucket
 *  Lets you view your uploaded files
 *  Handles all Pawsey technical settings internally
 
@@ -228,6 +230,46 @@ python pawsey_uploader.py upload <local_path> <bucket>
 
 ---
 
+##  Download files or folders
+
+```bash
+python pawsey_uploader.py download <remote_path> <local_destination> <bucket>
+```
+
+Downloads files from your bucket to your computer.
+
+### Examples:
+
+```bash
+# Download a folder
+python pawsey_uploader.py download "APEx_day_1/20260415/run_00/T1_proc/products" ./products/ usyd-data
+
+# Download a single file
+python pawsey_uploader.py download "APEx_day_1/somefile.txt" ./local-dest/ usyd-data
+```
+
+---
+
+##  Delete files or folders
+
+```bash
+python pawsey_uploader.py delete <remote_path> <bucket>
+```
+
+Deletes files from your bucket. You will be asked to confirm before anything is deleted.
+
+### Examples:
+
+```bash
+# Delete a specific file
+python pawsey_uploader.py delete "APEx_day_1/somefile.txt" usyd-data
+
+# Delete an entire folder
+python pawsey_uploader.py delete "APEx_day_1/20260415/run_00" usyd-data
+```
+
+---
+
 ##  View your uploaded files
 
 ```bash
@@ -338,6 +380,12 @@ python pawsey_uploader.py upload ./data adelaideu-data
 
 # Check uploaded files
 python pawsey_uploader.py list adelaideu-data
+
+# Download a folder from the bucket
+python pawsey_uploader.py download "drone-data/flight_01" ./local-folder/ adelaideu-data
+
+# Delete a file from the bucket
+python pawsey_uploader.py delete "drone-data/old-file.txt" adelaideu-data
 ```
 
 ---
