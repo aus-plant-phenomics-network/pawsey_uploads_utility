@@ -3,7 +3,7 @@ import subprocess
 import sys
 import os
 
-RCLONE_REMOTE = "aaneja"
+RCLONE_REMOTE = "pawsey-user"
 
 def run_command(cmd):
     try:
